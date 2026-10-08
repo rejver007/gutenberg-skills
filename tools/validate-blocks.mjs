@@ -48,6 +48,25 @@ function stripPhpHeader(source) {
   return end === -1 ? source : source.slice(end + 2);
 }
 
+/**
+ * Blocks the parser actually found, nested ones included.
+ *
+ * Matching an opening delimiter with a regex counted anything shaped like one,
+ * a delimiter the parser rejects included, and the vendor's own blockCount
+ * counts only the top level while its checks recurse past it. The number next
+ * to "checked:" exists to prove a run looked at something, so it has to come
+ * from the same tree the checks walked.
+ */
+function countParsedBlocks(blocks) {
+  let total = 0;
+  for (const block of blocks ?? []) {
+    // The parser emits the whitespace between blocks as a nameless entry.
+    if (!block.blockName) continue;
+    total += 1 + countParsedBlocks(block.innerBlocks);
+  }
+  return total;
+}
+
 function ruleNoRawHex(markup) {
   const found = [];
 
@@ -249,6 +268,7 @@ export function validateMarkup(markup, options = {}) {
   return {
     errors: findings.filter((f) => f.level === "error"),
     warnings: findings.filter((f) => f.level === "warn"),
+    blockCount: countParsedBlocks(structural.parsed),
     hasSchemas: upstream.loadBlockSchemas()
   };
 }
@@ -306,6 +326,8 @@ export function validateTheme(themeDir, skip = [], reportPath = null) {
   }
 
   const files = markupFiles(themeDir);
+  let blockCount = 0;
+
   for (const file of files) {
     const raw = readFileSync(file, "utf8");
     const markup = extname(file) === ".php" ? stripPhpHeader(raw) : raw;
@@ -313,9 +335,16 @@ export function validateTheme(themeDir, skip = [], reportPath = null) {
     const result = validateMarkup(markup, { label, themeJson, skip });
     errors.push(...result.errors);
     warnings.push(...result.warnings);
+    blockCount += result.blockCount;
   }
 
-  return { errors, warnings, fileCount: files.length, hasSchemas: upstream.loadBlockSchemas() };
+  return {
+    errors,
+    warnings,
+    fileCount: files.length,
+    blockCount,
+    hasSchemas: upstream.loadBlockSchemas()
+  };
 }
 
 function parseArgs(argv) {
@@ -364,6 +393,15 @@ function report(result, json) {
   for (const finding of result.warnings) {
     process.stdout.write(`warn   ${finding.file}  [${finding.rule}] ${finding.message}\n`);
   }
+
+  // Printed before the verdict: a run that matched no files, or files with no
+  // blocks in them, otherwise reports PASSED exactly like a real one.
+  const scope =
+    result.fileCount === undefined
+      ? `${result.blockCount} blocks`
+      : `${result.fileCount} files, ${result.blockCount} blocks`;
+  process.stdout.write(`checked: ${scope}
+`);
 
   const summary = `${result.errors.length} errors, ${result.warnings.length} warnings`;
   process.stdout.write(result.errors.length === 0 ? `PASSED: ${summary}\n` : `FAILED: ${summary}\n`);

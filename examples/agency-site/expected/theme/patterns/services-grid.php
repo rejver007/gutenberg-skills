@@ -3,7 +3,10 @@
  * Title: Services grid
  * Slug: agency-site/services-grid
  * Categories: agency-site
+ *
+ * @package agency-site
  */
+
 ?>
 <!-- wp:group {"backgroundColor":"neutral","align":"full","style":{"spacing":{"padding":{"top":"var(--wp--custom--section-rhythm--default)","bottom":"var(--wp--custom--section-rhythm--default)"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-neutral-background-color has-background" style="padding-top:var(--wp--custom--section-rhythm--default);padding-bottom:var(--wp--custom--section-rhythm--default)">

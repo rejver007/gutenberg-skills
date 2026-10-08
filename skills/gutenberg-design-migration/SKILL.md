@@ -205,9 +205,14 @@ node tools/validate-blocks.mjs --theme theme/
 together with `--theme` checks that one file against the theme's presets.
 
 Structural checks come from the vendored WordPress parser: delimiter mismatches,
-invalid attribute JSON, style attributes that do not exist, missing required
-classes. On top of those, five house rules, each with an id that `--skip-rule`
-accepts:
+invalid attribute JSON, style attributes that do not exist, and the generated
+`wp-block-*` class being present where it belongs and absent where
+`supports.className` is false. That last check belongs to the parser, not to a
+house rule. `supports.className` governs only the generated class, while a
+custom class is governed by `supports.customClassName`, which core leaves true
+on paragraph and list-item.
+
+On top of those, five house rules, each with an id that `--skip-rule` accepts:
 
 | Rule | Level | Fails on |
 |---|---|---|
@@ -277,7 +282,9 @@ Every project, shop or not. See `references/launch.md`: the checklist that
 outlives the theme, and the two endpoints WordPress leaves open to anyone by
 default, which are the findings a security scan returns the week after launch.
 `assets/webaula-endpoint-hardening.php` is the mu-plugin that closes them,
-and the file explains why it is only half of the fix.
+and the file explains why it is only half of the fix. The same reference
+covers what to do when the front door fails, which is server configuration
+rather than anything a theme or a mu-plugin can carry.
 
 This is not numbered as a stage because it produces no artifact the next stage
 consumes. It is the last thing done, and skipping it is invisible until

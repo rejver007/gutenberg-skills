@@ -3,7 +3,10 @@
  * Title: Hero
  * Slug: agency-site/hero
  * Categories: agency-site
+ *
+ * @package agency-site
  */
+
 ?>
 <!-- wp:cover {"overlayColor":"dark","isUserOverlayColor":true,"isDark":true,"align":"full","style":{"spacing":{"padding":{"top":"var(--wp--custom--section-rhythm--default)","bottom":"var(--wp--custom--section-rhythm--default)"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-cover alignfull" style="padding-top:var(--wp--custom--section-rhythm--default);padding-bottom:var(--wp--custom--section-rhythm--default)"><span aria-hidden="true" class="wp-block-cover__background has-dark-background-color has-background-dim-100 has-background-dim"></span><div class="wp-block-cover__inner-container">

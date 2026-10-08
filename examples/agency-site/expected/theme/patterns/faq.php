@@ -3,7 +3,10 @@
  * Title: FAQ
  * Slug: agency-site/faq
  * Categories: agency-site
+ *
+ * @package agency-site
  */
+
 ?>
 <!-- wp:group {"style":{"spacing":{"padding":{"top":"var(--wp--custom--section-rhythm--default)","bottom":"var(--wp--custom--section-rhythm--default)"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group" style="padding-top:var(--wp--custom--section-rhythm--default);padding-bottom:var(--wp--custom--section-rhythm--default)">

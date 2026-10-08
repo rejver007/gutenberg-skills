@@ -3,7 +3,10 @@
  * Title: CTA band
  * Slug: agency-site/cta-band
  * Categories: agency-site
+ *
+ * @package agency-site
  */
+
 ?>
 <!-- wp:group {"backgroundColor":"primary","textColor":"surface","align":"full","style":{"spacing":{"padding":{"top":"var(--wp--custom--section-rhythm--default)","bottom":"var(--wp--custom--section-rhythm--default)"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-surface-color has-primary-background-color has-text-color has-background" style="padding-top:var(--wp--custom--section-rhythm--default);padding-bottom:var(--wp--custom--section-rhythm--default)">

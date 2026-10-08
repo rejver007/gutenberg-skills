@@ -22,9 +22,36 @@ npm install
 npm test
 ```
 
-105 tests, no WordPress installation needed. The one check no script covers is
+108 tests, no WordPress installation needed. The one check no script covers is
 activating a generated theme in a real WordPress 7.0 install, which stays
 manual and belongs in the pull request description.
+
+## Coding standards for the PHP
+
+`npm test` does not cover the PHP. The repo ships one asset that runs on
+client servers and generates four files into every scaffolded theme, and both
+are held to the WordPress Coding Standards. `phpcs.xml.dist` carries the
+configuration, including what is excluded and why.
+
+CI installs the standard outside the repo so that npm stays the only
+dependency manager to set up. One script does it, and CI calls the same one, so
+these instructions cannot drift from what CI actually runs. Locally, once:
+
+```sh
+./tools/install-phpcs.sh /tmp/phpcs
+```
+
+Then from the repo root:
+
+```sh
+/tmp/phpcs/vendor/bin/phpcs
+```
+
+It reads `phpcs.xml.dist` with no arguments. `phpcbf` fixes the mechanical
+findings, but read its diff: it reformats, it does not judge.
+
+An exclusion goes in `phpcs.xml.dist` with a reason beside it, never as a flag
+in the CI command where the next reader cannot see it.
 
 ## Adding a validator rule
 

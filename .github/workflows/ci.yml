@@ -20,6 +20,47 @@ jobs:
       - run: npm ci
       - run: npm test
 
+  php:
+    # The repo ships one PHP asset and every scaffolded theme carries four
+    # generated PHP files. Neither was checked by anything before this.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: php -l on everything this repo ships
+        run: |
+          find skills examples tools -name '*.php' -not -path '*/vendor/*' -print0 \
+            | xargs -0 -r -n1 php -l
+
+      - name: php -l on a freshly scaffolded theme
+        run: |
+          node tools/scaffold-theme.mjs \
+            --input examples/agency-site/input/design-system.json \
+            --out /tmp/php-check
+          find /tmp/php-check -name '*.php' -print0 | xargs -0 -r -n1 php -l
+
+      # php -l is syntax. This is the standard the code claims to follow.
+      # Installed outside the repo on purpose: npm is the only dependency
+      # manager a contributor needs to set up, and phpcs.xml.dist carries the
+      # configuration either way. The install sequence lives in a script that
+      # CONTRIBUTING.md calls too, so the documented one cannot drift from this.
+      - name: WordPress Coding Standards
+        run: |
+          ./tools/install-phpcs.sh /tmp/phpcs
+          /tmp/phpcs/vendor/bin/phpcs
+
+      # The ruleset is named explicitly because these files sit outside the
+      # repo, where phpcs would not find phpcs.xml.dist on its own.
+      # --standard=WordPress skipped this repo's configuration entirely, which
+      # is where the minimum WP version, the text domain and the prefixes are
+      # set. Paths given on the command line override the ruleset's own <file>
+      # elements, so only the scaffolded theme is scanned here.
+      - name: the standard also passes on a freshly scaffolded theme
+        run: /tmp/phpcs/vendor/bin/phpcs --standard=./phpcs.xml.dist -p /tmp/php-check
+
   pipeline:
     # The example is the regression surface: regenerate it from its inputs and
     # prove nothing drifted. A fresh checkout is also the only place the CRLF

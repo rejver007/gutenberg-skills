@@ -133,9 +133,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * style.css is registered so WordPress recognises the theme, not because it
- * carries styles. Add a versioned file here only when a rule genuinely cannot
- * be expressed in theme.json.
+ * The style.css file is registered so WordPress recognises the theme, not
+ * because it carries styles. Add a versioned file here only when a rule
+ * genuinely cannot be expressed in theme.json.
  */
 function ${prefix}_enqueue_assets() {
 	wp_enqueue_style(
@@ -353,7 +353,9 @@ function patternsReadme(meta) {
   return `# Patterns
 
 WordPress discovers every \`.php\` file in this directory automatically. A
-pattern file needs this header and nothing else:
+pattern file needs this header and nothing else. The blank line between the
+doc comment and the closing tag is not decoration: WPCS fails the file without
+it.
 
 \`\`\`php
 <?php
@@ -361,7 +363,10 @@ pattern file needs this header and nothing else:
  * Title: Hero
  * Slug: ${meta.textDomain}/hero
  * Categories: ${meta.textDomain}
+ *
+ * @package ${meta.textDomain}
  */
+
 ?>
 <!-- wp:cover ... -->
 \`\`\`

@@ -3,7 +3,10 @@
  * Title: About, media beside text
  * Slug: agency-site/about-media-text
  * Categories: agency-site
+ *
+ * @package agency-site
  */
+
 ?>
 <!-- wp:media-text {"mediaType":"image","mediaUrl":"/wp-content/themes/agency-site/assets/tiimi.jpg","mediaPosition":"right","verticalAlignment":"center","align":"wide"} -->
 <div class="wp-block-media-text alignwide has-media-on-the-right is-stacked-on-mobile is-vertically-aligned-center"><div class="wp-block-media-text__content">

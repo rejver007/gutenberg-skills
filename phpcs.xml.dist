@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<ruleset name="gutenberg-skills">
+	<description>
+		WordPress Coding Standards for the PHP this repo ships and generates.
+
+		Two kinds of file are in scope. The hardening asset runs on client
+		servers, and the example theme is the committed output of the
+		generators, so an error here is an error the pipeline would write into
+		every theme it scaffolds.
+
+		Exclusions belong in this file with a reason next to them, never as a
+		flag in the CI command, where the next reader cannot see them.
+	</description>
+
+	<file>skills</file>
+	<file>examples</file>
+	<file>tools</file>
+
+	<!-- Upstream's snapshot. Keeping it pristine is what makes the next
+	     update a copy rather than a merge, so it is not ours to restyle. -->
+	<exclude-pattern>*/tools/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<!-- p: progress, so a run that scanned nothing is visible rather than
+	     passing silently. s: the sniff name, so a finding can be looked up. -->
+	<arg value="ps"/>
+
+	<rule ref="WordPress"/>
+
+	<!-- Without these two the text-domain and prefix sniffs accept anything,
+	     which is how a domain-less __() reached the asset. The theme value is
+	     the example theme's slug; default is core's own domain, which the
+	     asset uses on purpose so its one string comes from core's catalogue. -->
+	<config name="text_domain" value="agency-site,default"/>
+	<config name="prefixes" value="agency_site,webaula"/>
+
+	<!-- The generated themes declare Requires at least: 7.0, so deprecation
+	     checks should judge against the same floor. -->
+	<config name="minimum_wp_version" value="7.0"/>
+</ruleset>
